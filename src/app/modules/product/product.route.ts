@@ -3,8 +3,9 @@ import { productController } from './product.controller';
 
 const router = Router();
 
-router.post('/products', productController.postProductController);
-router.get('/products', productController.getAllProductController);
-router.get('/products/:productId', productController.getSingelProductController);
+router.post('/', productController.postProductController);
+router.get('/', productController.getAllProductController);
+router.get('/:productId', productController.getSingelProductController);
+router.delete('/:productId', productController.deleteSingelProductController);
 
 export const productRoutes = router;

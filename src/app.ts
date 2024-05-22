@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 //routing
-app.use('/api', productRoutes);
+app.use('/api/products', productRoutes);
 app.get('/', (req: Request, res: Response) => {
   res.send('connected');
 });

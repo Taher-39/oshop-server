@@ -74,9 +74,35 @@ const getSingelProductController = async (req: Request, res: Response) => {
     });
   }
 };
+const deleteSingelProductController = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const result = await ProductServices.deleteSingelProductService(productId);
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: 'Product information not found.',
+      });
+      return;
+    }
+    console.log(result);
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully!',
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while delete singel product.',
+      error: error,
+    });
+  }
+};
 
 export const productController = {
   postProductController,
   getAllProductController,
   getSingelProductController,
+  deleteSingelProductController,
 };

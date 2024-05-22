@@ -14,9 +14,14 @@ const getSingelProductService = async (productId: string) => {
   const result = await Product.findById({ _id: productId });
   return result;
 };
+const deleteSingelProductService = async (productId: string) => {
+  const result = await Product.findByIdAndDelete({ _id: productId });
+  return result;
+};
 
 export const ProductServices = {
   PostProductService,
   getAllProductService,
   getSingelProductService,
+  deleteSingelProductService,
 };
