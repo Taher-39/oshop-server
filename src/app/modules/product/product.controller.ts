@@ -86,6 +86,27 @@ const getSingelProductController = async (req: Request, res: Response) => {
     });
   }
 };
+const updateProductController = async (req: Request, res: Response) => {
+    try {
+      const productId = req.params.productId;
+      const updates = req.body;
+  
+      const updatedProduct = await productServices.updateProductService(productId, updates);
+  
+      res.status(200).json({
+        success: true,
+        message: 'Product updated successfully!',
+        data: updatedProduct
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      res.status(500).json({
+        success: false,
+        message: 'An error occurred while updating the product.',
+        error: errorMessage
+      });
+    }
+  };
 const deleteSingelProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
@@ -118,5 +139,6 @@ export const productController = {
   postProductController,
   getAllProductController,
   getSingelProductController,
+  updateProductController,
   deleteSingelProductController,
 };
