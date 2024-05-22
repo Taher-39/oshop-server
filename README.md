@@ -20,7 +20,7 @@ npm install
 ### Step 3: Environment Variables
 Create a `.env` file in the root directory and add your environment variables. For example:
 ```dotenv
-PORT=3000
+PORT=5000
 DB_URL=mongodb://localhost:27017/mydatabase
 ```
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ProductServices } from './product.service';
+import { productServices } from './product.service';
 
 const postProductController = async (req: Request, res: Response) => {
   try {
@@ -12,48 +12,60 @@ const postProductController = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await ProductServices.PostProductService(ProductInfo);
+    const result = await productServices.postProductService(ProductInfo);
     res.status(201).json({
       success: true,
       message: 'Product created successfully!',
       data: result,
     });
   } catch (error) {
-    console.error('Error posting Product information:', error);
+    // Ensure that the error is an instance of Error before accessing its properties
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
     res.status(500).json({
       success: false,
       message: 'An error occurred while posting Product information.',
-      error: error,
+      error: errorMessage,
     });
   }
 };
 const getAllProductController = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProductService();
-    if (!result) {
-      res.status(404).json({
-        success: false,
-        message: 'Product information not found.',
-      });
-      return;
+    const searchTerm = req.query.searchTerm as string;
+    let result;
+
+    if (searchTerm) {
+      result = await productServices.searchProductService(searchTerm);
+    } else {
+      result = await productServices.getAllProductService();
     }
+
+    if (!result || result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `No products found${searchTerm ? ` matching search term '${searchTerm}'` : ''}.`,
+      });
+    }
+
     res.status(200).json({
       success: true,
-      message: 'Products fetched successfully!',
+      message: `Products ${searchTerm ? `matching search term '${searchTerm}'` : ''} fetched successfully!`,
       data: result,
     });
   } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
     res.status(500).json({
       success: false,
-      message: 'An error occurred while getting all product information.',
-      error: error,
+      message: 'An error occurred while fetching products.',
+      error: errorMessage,
     });
   }
 };
 const getSingelProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
-    const result = await ProductServices.getSingelProductService(productId);
+    const result = await productServices.getSingelProductService(productId);
     if (!result) {
       res.status(404).json({
         success: false,
@@ -77,7 +89,7 @@ const getSingelProductController = async (req: Request, res: Response) => {
 const deleteSingelProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
-    const result = await ProductServices.deleteSingelProductService(productId);
+    const result = await productServices.deleteSingelProductService(productId);
     if (!result) {
       res.status(404).json({
         success: false,
@@ -85,17 +97,19 @@ const deleteSingelProductController = async (req: Request, res: Response) => {
       });
       return;
     }
-    console.log(result);
     res.status(200).json({
       success: true,
       message: 'Product deleted successfully!',
       data: null,
     });
   } catch (error) {
+    // Ensure that the error is an instance of Error before accessing its properties
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
     res.status(500).json({
       success: false,
       message: 'An error occurred while delete singel product.',
-      error: error,
+      error: errorMessage,
     });
   }
 };

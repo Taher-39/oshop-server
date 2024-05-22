@@ -1,11 +1,23 @@
 import { IProduct } from './product.interface';
 import { Product } from './product.model';
 
-const PostProductService = async (product: IProduct) => {
+const postProductService = async (product: IProduct) => {
   const result = await Product.create(product);
   return result;
 };
-
+const searchProductService = async (searchTerm?: string) => {
+  let query = {};
+  if (searchTerm) {
+    query = {
+      $or: [
+        { name: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search by product name
+        { description: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search by description
+      ],
+    };
+  }
+  const result = await Product.find(query);
+  return result;
+};
 const getAllProductService = async () => {
   const result = await Product.find();
   return result;
@@ -19,9 +31,10 @@ const deleteSingelProductService = async (productId: string) => {
   return result;
 };
 
-export const ProductServices = {
-  PostProductService,
+export const productServices = {
+  postProductService,
   getAllProductService,
   getSingelProductService,
   deleteSingelProductService,
+  searchProductService,
 };
