@@ -1,4 +1,9 @@
 # oshop-server
+This is the e-commarce application server for the OShop application.
+
+## Live Server
+
+You can access the live server [here](https://oshop-server.vercel.app/).
 
 ## Description
 This is a `oshop-server` template for a Node.js application built with TypeScript, Express.js, and MongoDB using Mongoose.
