@@ -1,12 +1,13 @@
 {
-  "name": "startter",
+  "name": "oshop-server",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "start:prod": "node dist/server.js",
+    "start": "node ./dist/server.js",
+    "start:prod": "node ./dist/server.js",
     "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "lint": "eslint src --ignore-path .eslintignore --ext .ts",
     "lint:fix": "npx eslint src --fix",
@@ -14,9 +15,6 @@
     "format:fix": "npx prettier --write src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
