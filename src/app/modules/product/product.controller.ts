@@ -32,13 +32,7 @@ const postProductController = async (req: Request, res: Response) => {
 const getAllProductController = async (req: Request, res: Response) => {
   try {
     const searchTerm = req.query.searchTerm as string;
-    let result;
-
-    if (searchTerm) {
-      result = await productServices.searchProductService(searchTerm);
-    } else {
-      result = await productServices.getAllProductService();
-    }
+    const result = await productServices.getProductService(searchTerm);
 
     if (!result || result.length === 0) {
       return res.status(404).json({
@@ -62,6 +56,7 @@ const getAllProductController = async (req: Request, res: Response) => {
     });
   }
 };
+
 const getSingelProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
@@ -75,7 +70,7 @@ const getSingelProductController = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       success: true,
-      message: 'Products fetched successfully!',
+      message: 'Product fetched successfully!',
       data: result,
     });
   } catch (error) {
@@ -87,26 +82,30 @@ const getSingelProductController = async (req: Request, res: Response) => {
   }
 };
 const updateProductController = async (req: Request, res: Response) => {
-    try {
-      const productId = req.params.productId;
-      const updates = req.body;
-  
-      const updatedProduct = await productServices.updateProductService(productId, updates);
-  
-      res.status(200).json({
-        success: true,
-        message: 'Product updated successfully!',
-        data: updatedProduct
-      });
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      res.status(500).json({
-        success: false,
-        message: 'An error occurred while updating the product.',
-        error: errorMessage
-      });
-    }
-  };
+  try {
+    const productId = req.params.productId;
+    const updates = req.body;
+
+    const updatedProduct = await productServices.updateProductService(
+      productId,
+      updates,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Product updated successfully!',
+      data: updatedProduct,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while updating the product.',
+      error: errorMessage,
+    });
+  }
+};
 const deleteSingelProductController = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;

@@ -5,7 +5,7 @@ const postProductService = async (product: IProduct) => {
   const result = await Product.create(product);
   return result;
 };
-const searchProductService = async (searchTerm?: string) => {
+const getProductService = async (searchTerm?: string) => {
   let query = {};
   if (searchTerm) {
     query = {
@@ -21,10 +21,7 @@ const searchProductService = async (searchTerm?: string) => {
   const result = await Product.find(query);
   return result;
 };
-const getAllProductService = async () => {
-  const result = await Product.find();
-  return result;
-};
+
 const getSingelProductService = async (productId: string) => {
   const result = await Product.findById({ _id: productId });
   return result;
@@ -74,9 +71,8 @@ const deleteSingelProductService = async (productId: string) => {
 
 export const productServices = {
   postProductService,
-  getAllProductService,
+  getProductService,
   getSingelProductService,
   updateProductService,
   deleteSingelProductService,
-  searchProductService,
 };
