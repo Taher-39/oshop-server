@@ -5,20 +5,46 @@ import { Order } from './order.model';
 export const createOrderService = async (
   orderData: IOrder,
 ): Promise<IOrder> => {
-  const { productId } = orderData;
+  const { productId, price, quantity } = orderData;
 
-  // Validate MongoDB ObjectId
+  // Validate the product ID 
   if (!productId.match(/^[0-9a-fA-F]{24}$/)) {
     throw new Error('Invalid product ID');
   }
 
   // Check if the product exists in the product collection
-  const productExists = await Product.findById(productId);
-  if (!productExists) {
+  const product = await Product.findById(productId);
+  if (!product) {
     throw new Error('Product not found');
   }
 
+  // Check if the product price matches
+  if (product.price !== price) {
+    throw new Error('Product price mismatch');
+  }
+
+  // Check if the product has sufficient quantity
+  if (product.inventory.quantity < quantity) {
+    throw new Error('Insufficient quantity available in inventory');
+  }
+
+  // Create and save the order
   const newOrder = new Order(orderData);
-  await newOrder.save();
+  const result = await newOrder.save();
+
+  // Update the product inventory only if the order is successfully created
+  if (result._id) {
+    product.inventory.quantity -= quantity;
+    product.inventory.inStock = product.inventory.quantity > 0;
+    await product.save();
+  }
+
   return newOrder;
+};
+
+export const getOrdersService = async (email?: string): Promise<IOrder[]> => {
+  if (email) {
+    return await Order.find({ email });
+  }
+  return await Order.find();
 };

@@ -1,4 +1,3 @@
-// Define the TypeScript interfaces for each schema
 export interface IVariant {
   type: string;
   value: string;

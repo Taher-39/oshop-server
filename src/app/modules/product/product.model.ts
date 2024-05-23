@@ -1,6 +1,9 @@
-import { Schema, model } from 'mongoose';
-import { IInventory, IProduct, IVariant } from './product.interface';
-//variant schema
+import { Schema, model, Document } from 'mongoose';
+import { IProduct, IVariant, IInventory } from './product.interface';
+
+interface IProductModel extends IProduct, Document {}
+
+// Variant schema
 const variantSchema = new Schema<IVariant>({
   type: {
     type: String,
@@ -12,7 +15,7 @@ const variantSchema = new Schema<IVariant>({
   },
 });
 
-//inventory schema
+// Inventory schema
 const inventorySchema = new Schema<IInventory>({
   quantity: {
     type: Number,
@@ -25,8 +28,8 @@ const inventorySchema = new Schema<IInventory>({
   },
 });
 
-//product schema
-const productSchema = new Schema<IProduct>({
+// Product schema
+const productSchema = new Schema<IProductModel>({
   name: {
     type: String,
     required: true,
@@ -58,5 +61,5 @@ const productSchema = new Schema<IProduct>({
   },
 });
 
-//product model
-export const Product = model<IProduct>('Product', productSchema);
+// Product model
+export const Product = model<IProductModel>('Product', productSchema);
