@@ -1,15 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-// Zod schema for IOrder
-const orderValidationSchema = z.object({
-  email: z.string().email(),
-  productId: z.string(),
-  price: z.number().min(0),
-  quantity: z.number().int().min(0),
+const objectIdPattern = /^[a-fA-F0-9]{24}$/;
+
+export const orderValidationSchema = z.object({
+  email: z
+    .string()
+    .email({ message: 'Invalid email address. Please provide a valid email.' }),
+  productId: z.string().regex(objectIdPattern, {
+    message: 'Product ID must be a 24-character hexadecimal string.',
+  }),
+  price: z.number().min(0, { message: 'Price must be a non-negative number.' }),
+  quantity: z
+    .number()
+    .int({ message: 'Quantity must be an integer.' })
+    .min(0, { message: 'Quantity must be a non-negative integer.' }),
 });
 
-// Middleware for validating order creation
 export const validateOrderCreation = (
   req: Request,
   res: Response,

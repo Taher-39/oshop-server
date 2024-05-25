@@ -7,11 +7,6 @@ export const createOrderService = async (
 ): Promise<IOrder> => {
   const { productId, price, quantity } = orderData;
 
-  // Validate the product ID 
-  if (!productId.match(/^[0-9a-fA-F]{24}$/)) {
-    throw new Error('Invalid product ID');
-  }
-
   // Check if the product exists in the product collection
   const product = await Product.findById(productId);
   if (!product) {
